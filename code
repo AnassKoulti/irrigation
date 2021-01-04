@@ -1,0 +1,88 @@
+#libraries
+
+import json
+import pandas as pd 
+import numpy as np
+with open('eco-sensors_irrigation_2020-06-01_2020-08-31.json') as file:
+    data = json.load(file)
+data_table= pd.DataFrame(data)
+data_table
+
+...........................................................................
+
+#fonction_clean
+
+def clean_data(data_table):
+    for x in range(3):
+        for z in range(len(data_table['datasets'][x]['data'])):
+            if data_table['datasets'][x]['data'][z]==200:
+                data_table['datasets'][x]['data'][z]=np.nan 
+                
+...........................................................................
+
+#graph(c'est le meme code pour les trois mois)
+
+import matplotlib.pyplot as plt
+l60=[]
+l61=[]
+l62=[]
+for i in range(len(data_table['labels'][0])):
+    l60.append(data_table['labels'][0][i])  
+    if data_table['labels'][0][i]== '2020-07-01 00:58:40':
+        break
+fig, (ax1, ax2, ax3) = plt.subplots(3,figsize=(10,10),dpi=100,sharex = True)
+x_0=l60
+y_0=data_table['datasets'][0]['data'][0:len(l60)]
+ax1.plot(x_0,y_0, color = 'blue', alpha = 0.2)
+ax1.fill_between(x=x_0[0:], y1=0, y2=15, color='red', alpha=0.2)
+ax1.fill_between(x=x_0[0:], y1=15, y2=30, color='orange', alpha=0.2)
+ax1.fill_between(x=x_0[0:], y1=30, y2=60, color='green', alpha=0.2)
+ax1.fill_between(x=x_0[0:], y1=60, y2=100, color='yellow', alpha=0.2)
+ax1.fill_between(x=x_0[0:], y1=100, y2=200, color='red', alpha=0.2)
+ax1.set_yticks([15/2,(30+15)/2,(30+60)/2,(60+100)/2,(100+200)/2])
+ax1.set_yticklabels(['saturated','too wet','perfect','plan to water','dry'])
+ax1.set_xlim([0,len(l60)])
+ax1.set_ylim([0,200])
+ax1.legend(ax1.plot(x_0,y_0), ('1: 1m/30cm [kPa]',), loc = 'upper left')
+ax1.set_title('irrigation june 2020')
+
+
+for i in range(len(data_table['labels'][1])):
+    l61.append(data_table['labels'][1][i])  
+    if data_table['labels'][1][i]== '2020-07-01 00:58:40':
+        break
+x_1=l61
+y_1=data_table['datasets'][1]['data'][0:len(l61)]
+ax2.plot(x_1,y_1, color = 'blue', alpha = 0.2)
+ax2.fill_between(x=x_1[0:], y1=0, y2=15, color='red', alpha=0.2)
+ax2.fill_between(x=x_1[0:], y1=15, y2=30, color='orange', alpha=0.2)
+ax2.fill_between(x=x_1[0:], y1=30, y2=60, color='green', alpha=0.2)
+ax2.fill_between(x=x_1[0:], y1=60, y2=100, color='yellow', alpha=0.2)
+ax2.fill_between(x=x_1[0:], y1=100, y2=200, color='red', alpha=0.2)
+ax2.set_yticks([15/2,(30+15)/2,(30+60)/2,(60+100)/2,(100+200)/2])
+ax2.set_yticklabels(['saturated','too wet','perfect','plan to water','dry'])
+ax2.set_xlim([0,len(l61)])
+ax2.set_ylim([0,200])
+ax2.legend(ax2.plot(x_1,y_1), ('2: 1cm/30cm [kPa]',), loc = 'upper left')
+
+
+for i in range(len(data_table['labels'][2])):
+    l62.append(data_table['labels'][2][i])  
+    if data_table['labels'][2][i]== '2020-07-01 00:58:40':
+        break
+x_2=l62
+y_2=data_table['datasets'][2]['data'][0:len(l62)]
+ax3.plot(x_2,y_2, color = 'blue', alpha = 0.2)
+ax3.fill_between(x=x_2[0:], y1=0, y2=15, color='red', alpha=0.2)
+ax3.fill_between(x=x_2[0:], y1=15, y2=30, color='orange', alpha=0.2)
+ax3.fill_between(x=x_2[0:], y1=30, y2=60, color='green', alpha=0.2)
+ax3.fill_between(x=x_2[0:], y1=60, y2=100, color='yellow', alpha=0.2)
+ax3.fill_between(x=x_2[0:], y1=100, y2=200, color='red', alpha=0.2)
+ax3.set_yticks([15/2,(30+15)/2,(30+60)/2,(60+100)/2,(100+200)/2])
+ax3.set_yticklabels(['saturated','too wet','perfect','plan to water','dry'])
+ax3.set_xticks([(len(l62)/7)/2,2*len(l62)/7-(len(l62)/7)/2,3*len(l62)/7-(len(l62)/7)/2,4*len(l62)/7-(len(l62)/7)/2,5*len(l62)/7-(len(l62)/7)/2,6*len(l62)/7-(len(l62)/7)/2,(7*len(l62)/7)-(len(l62)/7)/2])
+ax3.set_xticklabels(['2020-06-05','2020-06-09','2020-06-13','2020-06-17','2020-06-21','2020-06-25','2020-06-29'])
+ax3.set_xlim([0,len(l62)])
+ax3.set_ylim([0,200])
+fig.autofmt_xdate()
+ax3.legend(ax3.plot(x_2,y_2), ('3: 1m/30cm [kPa]',), loc = 'upper left')
